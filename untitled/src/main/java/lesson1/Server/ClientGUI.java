@@ -39,7 +39,9 @@ public class ClientGUI extends JFrame {
     }
 
     private void appendLog(String text) {
-        log.append(text + "\n");
+        if (text != null) {
+            log.append(text + "\n");
+        }
     }
 
 
@@ -48,31 +50,17 @@ public class ClientGUI extends JFrame {
             String text = tfMessage.getText();
             if (!text.equals("")) {
                 server.message(name + ": " + text);
-                tfMessage.setText("^_^");
+                tfMessage.setText("");
             }
         } else {
             appendLog("Нет подключения к серверу");
         }
     }
 
-    public void answer(String text){
+    public void answer(String text) {
         appendLog(text);
     }
 
-    private void connectToServer() {
-        if (server.connectUser(this)){
-            appendLog("Вы успешно подключились!\n");
-            headPanel.setVisible(false);
-            connected = true;
-            name = jtLogin.getText();
-//            String log = server.getLog();
-//            if (log != null){
-//                appendLog(log);
-//            }
-        } else {
-            appendLog("Подключение не удалось");
-        }
-    }
 
     private void createPanel() {
 
@@ -131,11 +119,14 @@ public class ClientGUI extends JFrame {
 
     private void connectServer() {
 
-        if(server.connectUser(this)){
+        if (server.connectUser(this)) {
             appendLog("Вы подключлись");
             connected = true;
             name = jtLogin.getText();
             headPanel.setVisible(false);
+            appendLog(server.getLog());
+
+
         } else {
             appendLog("Не удалось подключится");
         }
